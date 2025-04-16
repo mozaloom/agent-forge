@@ -3,3 +3,4 @@ black
 pylint
 pytest
 huggingface_hub
+dotenv
