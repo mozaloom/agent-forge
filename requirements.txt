@@ -4,3 +4,9 @@ pylint
 pytest
 huggingface_hub
 dotenv
+markdownify
+smolagents
+requests
+duckduckgo_search
+pandas
+gradio
