@@ -9,7 +9,7 @@ HF_TOKEN = os.getenv("HF_TOKEN")
 client = InferenceClient("meta-llama/Llama-3.2-3B-Instruct")
 
 
-'''output = client.text_generation(
+"""output = client.text_generation(
     "The capital of france is",
     max_new_tokens=100,
 )
@@ -34,7 +34,7 @@ output = client.text_generation(
 )
 
 
-'''
+"""
 
 SYSTEM_PROMPT = """Answer the following questions as best you can. You have access to the following tools:
 
@@ -71,11 +71,9 @@ Final Answer: the final answer to the original input question
 Now begin! Reminder to ALWAYS use the exact characters `Final Answer:` when you provide a definitive answer. """
 
 # Since we are running the "text_generation", we need to add the right special tokens.
-prompt=f"""<|begin_of_text|><|start_header_id|>system<|end_header_id|>
+prompt = f"""<|begin_of_text|><|start_header_id|>system<|end_header_id|>
 {SYSTEM_PROMPT}
 <|eot_id|><|start_header_id|>user<|end_header_id|>
 What's the weather in London ?
 <|eot_id|><|start_header_id|>assistant<|end_header_id|>
 """
-
-

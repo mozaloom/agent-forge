@@ -4,10 +4,13 @@ import requests
 import markdownify
 import smolagents
 
+
 class VisitWebpageTool(Tool):
     name = "visit_webpage"
     description = "Visits a webpage at the given url and reads its content as a markdown string. Use this to browse webpages."
-    inputs = {'url': {'type': 'string', 'description': 'The url of the webpage to visit.'}}
+    inputs = {
+        "url": {"type": "string", "description": "The url of the webpage to visit."}
+    }
     output_type = "string"
 
     def forward(self, url: str) -> str:
