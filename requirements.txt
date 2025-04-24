@@ -10,3 +10,7 @@ requests
 duckduckgo_search
 pandas
 gradio
+langchain
+langchain_community
+rank_bm25
+helium
