@@ -22,7 +22,9 @@ Please search for images of Wonder Woman and generate a detailed visual descript
 
 
 def parse_arguments():
-    parser = argparse.ArgumentParser(description="Run a web browser automation script with a specified model.")
+    parser = argparse.ArgumentParser(
+        description="Run a web browser automation script with a specified model."
+    )
     parser.add_argument(
         "prompt",
         type=str,
@@ -50,18 +52,29 @@ def save_screenshot(memory_step: ActionStep, agent: CodeAgent) -> None:
     driver = helium.get_driver()
     current_step = memory_step.step_number
     if driver is not None:
-        for previous_memory_step in agent.memory.steps:  # Remove previous screenshots from logs for lean processing
-            if isinstance(previous_memory_step, ActionStep) and previous_memory_step.step_number <= current_step - 2:
+        for (
+            previous_memory_step
+        ) in (
+            agent.memory.steps
+        ):  # Remove previous screenshots from logs for lean processing
+            if (
+                isinstance(previous_memory_step, ActionStep)
+                and previous_memory_step.step_number <= current_step - 2
+            ):
                 previous_memory_step.observations_images = None
         png_bytes = driver.get_screenshot_as_png()
         image = Image.open(BytesIO(png_bytes))
         print(f"Captured a browser screenshot: {image.size} pixels")
-        memory_step.observations_images = [image.copy()]  # Create a copy to ensure it persists, important!
+        memory_step.observations_images = [
+            image.copy()
+        ]  # Create a copy to ensure it persists, important!
 
     # Update observations with current URL
     url_info = f"Current url: {driver.current_url}"
     memory_step.observations = (
-        url_info if memory_step.observations is None else memory_step.observations + "\n" + url_info
+        url_info
+        if memory_step.observations is None
+        else memory_step.observations + "\n" + url_info
     )
     return
 
@@ -76,7 +89,9 @@ def search_item_ctrl_f(text: str, nth_result: int = 1) -> str:
     """
     elements = driver.find_elements(By.XPATH, f"//*[contains(text(), '{text}')]")
     if nth_result > len(elements):
-        raise Exception(f"Match n°{nth_result} not found (only {len(elements)} matches found)")
+        raise Exception(
+            f"Match n°{nth_result} not found (only {len(elements)} matches found)"
+        )
     result = f"Found {len(elements)} matches for '{text}'."
     elem = elements[nth_result - 1]
     driver.execute_script("arguments[0].scrollIntoView(true);", elem)
