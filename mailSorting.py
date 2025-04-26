@@ -129,8 +129,12 @@ def route_email(state: EmailState) -> str:
 email_graph = StateGraph(EmailState)
 
 # Add nodes
-email_graph.add_node("read_email", read_email)  # the read_email node executes the read_mail function
-email_graph.add_node("classify_email", classify_email)  # the classify_email node will execute the classify_email function
+email_graph.add_node(
+    "read_email", read_email
+)  # the read_email node executes the read_mail function
+email_graph.add_node(
+    "classify_email", classify_email
+)  # the classify_email node will execute the classify_email function
 email_graph.add_node("handle_spam", handle_spam)  # same logic
 email_graph.add_node("drafting_response", drafting_response)  # same logic
 email_graph.add_node("notify_mr_wayne", notify_mr_wayne)  # same logic
@@ -138,7 +142,9 @@ email_graph.add_node("notify_mr_wayne", notify_mr_wayne)  # same logic
 
 # Define Our Routing Logic
 # Add edges
-email_graph.add_edge(START, "read_email")  # After starting we go to the "read_email" node
+email_graph.add_edge(
+    START, "read_email"
+)  # After starting we go to the "read_email" node
 email_graph.add_edge("read_email", "classify_email")  # after_reading we classify
 
 # Add conditional edges
@@ -198,6 +204,13 @@ langfuse_handler = CallbackHandler()
 
 # Process legitimate email
 legitimate_result = compiled_graph.invoke(
-    input={"email": legitimate_email, "is_spam": None, "spam_reason": None, "email_category": None, "draft_response": None, "messages": []},
-    config={"callbacks": [langfuse_handler]}
+    input={
+        "email": legitimate_email,
+        "is_spam": None,
+        "spam_reason": None,
+        "email_category": None,
+        "draft_response": None,
+        "messages": [],
+    },
+    config={"callbacks": [langfuse_handler]},
 )
