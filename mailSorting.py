@@ -6,11 +6,15 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.messages import HumanMessage, AIMessage
 from langchain_huggingface import ChatHuggingFace, HuggingFaceEndpoint
 from IPython.display import Image, display
+from langfuse.callback import CallbackHandler
 
 
 # Load the API key from the secrets
 load_dotenv()
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+LANGFUSE_PUBLIC_KEY = os.getenv("LANGFUSE_PUBLIC_KEY")
+LANGFUSE_SECRET_KEY = os.getenv("LANGFUSE_SECRET_KEY")
+LANGFUSE_HOST = os.getenv("LANGFUSE_HOST")
 
 # Initialize our LLM
 model = ChatGoogleGenerativeAI(model="gemini-2.0-flash", temperature=0)
@@ -39,16 +43,16 @@ def classify_email(state: EmailState):
     email = state["email"]
 
     prompt = f"""
-As Alfred the butler of Mr wayne and it's SECRET identity Batman, analyze this email and determine if it is spam or legitimate and should be brought to Mr wayne's attention.
+    As Alfred the butler of Mr wayne and it's SECRET identity Batman, analyze this email and determine if it is spam or legitimate and should be brought to Mr wayne's attention.
 
-Email:
-From: {email['sender']}
-Subject: {email['subject']}
-Body: {email['body']}
+    Email:
+    From: {email['sender']}
+    Subject: {email['subject']}
+    Body: {email['body']}
 
-First, determine if this email is spam.
-answer with SPAM or HAM if it's legitimate. Only reurn the answer
-Answer :
+    First, determine if this email is spam.
+    answer with SPAM or HAM if it's legitimate. Only reurn the answer
+    Answer :
     """
     messages = [HumanMessage(content=prompt)]
     response = model.invoke(messages)
@@ -78,14 +82,14 @@ def drafting_response(state: EmailState):
     email = state["email"]
 
     prompt = f"""
-As Alfred the butler, draft a polite preliminary response to this email.
+    As Alfred the butler, draft a polite preliminary response to this email.
 
-Email:
-From: {email['sender']}
-Subject: {email['subject']}
-Body: {email['body']}
+    Email:
+    From: {email['sender']}
+    Subject: {email['subject']}
+    Body: {email['body']}
 
-Draft a brief, professional response that Mr. Wayne can review and personalize before sending.
+    Draft a brief, professional response that Mr. Wayne can review and personalize before sending.
     """
 
     messages = [HumanMessage(content=prompt)]
@@ -125,12 +129,8 @@ def route_email(state: EmailState) -> str:
 email_graph = StateGraph(EmailState)
 
 # Add nodes
-email_graph.add_node(
-    "read_email", read_email
-)  # the read_email node executes the read_mail function
-email_graph.add_node(
-    "classify_email", classify_email
-)  # the classify_email node will execute the classify_email function
+email_graph.add_node("read_email", read_email)  # the read_email node executes the read_mail function
+email_graph.add_node("classify_email", classify_email)  # the classify_email node will execute the classify_email function
 email_graph.add_node("handle_spam", handle_spam)  # same logic
 email_graph.add_node("drafting_response", drafting_response)  # same logic
 email_graph.add_node("notify_mr_wayne", notify_mr_wayne)  # same logic
@@ -138,10 +138,7 @@ email_graph.add_node("notify_mr_wayne", notify_mr_wayne)  # same logic
 
 # Define Our Routing Logic
 # Add edges
-email_graph.add_edge(
-    START, "read_email"
-)  # After starting we go to the "read_email" node
-
+email_graph.add_edge(START, "read_email")  # After starting we go to the "read_email" node
 email_graph.add_edge("read_email", "classify_email")  # after_reading we classify
 
 # Add conditional edges
@@ -193,4 +190,14 @@ legitimate_result = compiled_graph.invoke(
 print("\nProcessing spam email...")
 spam_result = compiled_graph.invoke(
     {"email": spam_email, "is_spam": None, "draft_response": None, "messages": []}
+)
+
+
+# Initialize Langfuse CallbackHandler for LangGraph/Langchain (tracing)
+langfuse_handler = CallbackHandler()
+
+# Process legitimate email
+legitimate_result = compiled_graph.invoke(
+    input={"email": legitimate_email, "is_spam": None, "spam_reason": None, "email_category": None, "draft_response": None, "messages": []},
+    config={"callbacks": [langfuse_handler]}
 )

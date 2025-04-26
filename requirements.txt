@@ -16,6 +16,8 @@ langchain_community
 rank_bm25
 helium
 langgraph
+langchain
 langchain_openai
 langchain_huggingface
 langchain_google_genai
+langfuse
