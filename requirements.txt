@@ -22,3 +22,7 @@ langchain_huggingface
 langchain_google_genai
 langchain_core
 langfuse
+llama_index
+llama_index.llms.huggingface_api
+llama_index.retrievers.bm25
+llama_index.tools.duckduckgo
