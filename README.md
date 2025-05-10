@@ -62,7 +62,7 @@ To run the code in this repository, you need:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/ai-agents-course.git
+   git clone https://github.com/mozaloom/agent-forge.git
    cd ai-agents-course
    ```
 
