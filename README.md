@@ -58,7 +58,7 @@ To run the code in this repository, you need:
 - Python 3.12+
 - Dependencies listed in `requirements.txt`
 
-## 🛠️ Installation
+## Installation
 
 1. Clone the repository:
    ```bash
