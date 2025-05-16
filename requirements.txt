@@ -24,3 +24,8 @@ llama-index==0.12.33
 llama-index-llms-huggingface-api==0.4.1
 llama-index-retrievers-bm25==0.5.2
 llama-index-tools-duckduckgo==0.3.0
+bitsandbytes
+peft
+trl
+tensorboardX
+wandb
