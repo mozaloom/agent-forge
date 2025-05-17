@@ -29,3 +29,10 @@ peft
 trl
 tensorboardX
 wandb
+smolagents[telemetry]
+opentelemetry-sdk
+opentelemetry-exporter-otlp
+openinference-instrumentation-smolagents
+langfuse
+datasets
+smolagents[gradio]
