@@ -178,3 +178,4 @@ cython_debug/
 
 .gradio
 .vscode
+gemma-2-2B-it-thinking-function_calling-V0
